@@ -22,3 +22,7 @@ th {
 .btn-group-sm>.btn, .btn-sm {
     padding: 5px 20px !important;
 }
+
+.btn-default.focus, .btn-default:focus, .btn-success.focus, .btn-success:focus, .btn-danger.focus, .btn-danger:focus {
+	outline: 0 !important;
+}
