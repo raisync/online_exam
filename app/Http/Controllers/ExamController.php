@@ -1,0 +1,10 @@
+<?php
+
+namespace OnlineExam\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ExamController extends Controller
+{
+    //
+}
