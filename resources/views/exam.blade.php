@@ -1,0 +1,1 @@
+<a href="{{ route('student') }}" class="btn btn-sm btn-info">Back</a>

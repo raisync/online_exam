@@ -22,5 +22,18 @@ class DatabaseSeeder extends Seeder
             'subject' => 'English',
             'user_id' => '1',
         ]);
+
+        DB::table('questions')->insert([
+            'subject_id' => '1',
+            'question' => 'What is the plural for fish?',
+        ]);
+
+        DB::table('options')->insert([
+            'question_id' => '1',
+            'option_a' => 'shark',
+            'option_b' => 'dragon',
+            'option_c' => 'fishes',
+            'option_d' => 'schwarzenegger',
+        ]);
     }
 }

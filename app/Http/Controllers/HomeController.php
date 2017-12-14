@@ -2,6 +2,9 @@
 
 namespace OnlineExam\Http\Controllers;
 
+use OnlineExam\Options;
+use OnlineExam\Subjects;
+use OnlineExam\Questions;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -31,6 +34,13 @@ class HomeController extends Controller
     }
 
     public function student() {
-        return view('student');
+        $subjects = Subjects::all();
+        $data = ['subjects' => $subjects];
+
+        return view('student', $data);
+    }
+
+    public function exam() {
+        return view('exam');
     }
 }

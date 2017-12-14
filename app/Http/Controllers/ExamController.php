@@ -2,8 +2,9 @@
 
 namespace OnlineExam\Http\Controllers;
 
-use DB;
+use OnlineExam\Options;
 use OnlineExam\Subjects;
+use OnlineExam\Questions;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -15,9 +16,10 @@ class ExamController extends Controller
      */
     public function index()
     {
-        $subjects = Subjects::WHERE('user_id', auth()->user()->id)->get();
+        $subjects = Subjects::WHERE('user_id', '=', auth()->user()->id)->get();
+        $data = ['subjects' => $subjects];
 
-        return view('/', ['subjects' => $subjects]);
+        return view('admin', $data);
     }
 
     /**
@@ -25,12 +27,9 @@ class ExamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(array $data)
+    public function create()
     {
-        return Subjects::create([
-            'name' => $data['name'],
-            'user_id' => auth()->user()->id,
-        ]);
+        return view('create');
     }
 
     /**
@@ -41,7 +40,22 @@ class ExamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $subjects = new Subjects;
+        $subjects->subject = $request->subject;
+        $subjects->user_id = auth()->user()->id;
+        $subjects->save();
+
+        $questions = new Questions;
+        $questions->subject_id = $subjects->id;
+        $questions->question = $request->question;
+        $questions->save();
+
+        $options = new Options;
+        $options->question_id = $questions->id;
+        $options->option = $request->option;
+        $options->save();
+
+        return redirect(route('index'))->with('message','Added Successfully!');
     }
 
     /**
@@ -50,9 +64,12 @@ class ExamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        //
+        $subjects = Subjects::find($id);
+        $data = ['subjects' => $subjects];
+
+        return view('view', $data);
     }
 
     /**
@@ -63,7 +80,10 @@ class ExamController extends Controller
      */
     public function edit($id)
     {
-        //
+        $subjects = Subjects::find($id);
+        $data = ['subjects' => $subjects];
+
+        return view('edit', $data);
     }
 
     /**
@@ -75,7 +95,12 @@ class ExamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $subjects = Subjects::find($id);
+        $subjects->subject = $request->subject;
+        $subjects->user_id = auth()->user()->id;
+        $subjects->save();
+
+        return redirect(route('index'))->with('message','Updated Successfully!');
     }
 
     /**
@@ -86,6 +111,8 @@ class ExamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Subjects::find($id)->delete();
+
+        return redirect(route('index'))->with('message','Deleted Successfully!');
     }
 }
